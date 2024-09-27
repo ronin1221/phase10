@@ -1,3 +1,5 @@
+import {Card, CardColor} from "@/game/card";
+
 function checkSameColor(hand: Card[], requiredCount: number): boolean {
     const colorCounts = new Map<CardColor, number>();
 

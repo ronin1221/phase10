@@ -1,35 +1,35 @@
-import { Card } from './card'
-import { checkSets, checkSequence } from './deck'
+import { Card } from './card';
+import { checkSets, checkSequence, checkSameColor } from './deck';
 
 export interface Phase {
     description: string;
-    requirement: (hand: Card) => boolean;
+    requirement: (hand: Card[]) => boolean;
 }
 
-export const Phases: Phase[] = [
+export const phases: Phase[] = [
     {
         description: "2 Drillinge",
         requirement: (hand) => checkSets(hand, 3, 2)
     },
     {
         description: "1 Drilling + 1 Viererfolge",
-        requirement: (hand) => checkSets(hand, 4, 1) && checkSets(hand, 3,1)
+        requirement: (hand) => checkSets(hand, 3, 1) && checkSequence(hand, 4)
     },
     {
         description: "1 Vierling + 1 Viererfolge",
-        requirement: (hand) => checkSets(hand, 4, 1) && checkSets(hand, 4, 1)
+        requirement: (hand) => checkSets(hand, 4, 1) && checkSequence(hand, 4)
     },
     {
         description: "1 Siebenerfolge",
-        requirement: (hand) => checkSets(hand, 7)
+        requirement: (hand) => checkSequence(hand, 7)
     },
     {
         description: "1 Achterfolge",
-        requirement: (hand) => checkSets(hand, 8)
+        requirement: (hand) => checkSequence(hand, 8)
     },
     {
         description: "1 Neunerfolge",
-        requirement: (hand) => checkSets(hand, 9)
+        requirement: (hand) => checkSequence(hand, 9)
     },
     {
         description: "2 Vierlinge",
@@ -46,6 +46,5 @@ export const Phases: Phase[] = [
     {
         description: "1 Fünfling + 1 Drilling",
         requirement: (hand) => checkSets(hand, 5, 1) && checkSets(hand, 3, 1)
-    },
-
-]
+    }
+];
