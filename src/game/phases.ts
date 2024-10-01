@@ -1,5 +1,5 @@
-import { Card } from './card';
-import { checkSets, checkSequence, checkSameColor } from './deck';
+import {Card} from './card';
+import {checkSets, checkSequence, checkSameColor} from './deck';
 
 export interface Phase {
     description: string;

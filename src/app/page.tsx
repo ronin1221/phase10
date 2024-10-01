@@ -6,7 +6,7 @@ import App from '../App'; // Importiere dein Spiel
 const HomePage: React.FC = () => {
     return (
         <div>
-            <App /> {/* Das Phase10-Spiel hier rendern */}
+            <App/> {/* Das Phase10-Spiel hier rendern */}
         </div>
     );
 };

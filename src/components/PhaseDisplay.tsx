@@ -4,7 +4,7 @@ interface PhaseDisplayProps {
     currentPhase: string;
 }
 
-const PhaseDisplay: React.FC<PhaseDisplayProps> = ({ currentPhase }) => {
+const PhaseDisplay: React.FC<PhaseDisplayProps> = ({currentPhase}) => {
     return (
         <div className="phase-display">
             <h2>Aktuelle Phase</h2>

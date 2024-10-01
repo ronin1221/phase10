@@ -1,12 +1,12 @@
 import React from 'react';
-import { Card } from '../game/card';
+import {Card} from '../game/card';
 
 interface HandProps {
     cards: Card[];
     onCardClick: (card: Card) => void; // Die Typdefinition für den Callback
 }
 
-const Hand: React.FC<HandProps> = ({ cards, onCardClick }) => {
+const Hand: React.FC<HandProps> = ({cards, onCardClick}) => {
     return (
         <div className="flex space-x-2">
             {cards.map((card, index) => (

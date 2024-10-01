@@ -1,7 +1,6 @@
 import {Card, CardColor, CardType} from './card';
 
 
-
 export function createDeck(): Card[] {
     const deck: Card[] = [];
 
