@@ -1,80 +1,60 @@
 import React, { useState } from 'react';
-import { createDeck, shuffleDeck } from './game/deck';
-import { phases } from './game/phases';
-import Hand from './components/Hand';
-import Deck from './components/Deck';
-import PhaseDisplay from './components/PhaseDisplay';
-import GameControls from './components/GameControls';
-import { Card } from './game/card';
+import { Gameplay } from './game/gameplay';
 import { Player } from './game/player';
+import { createDeck } from './game/deck';
 
 function App() {
-    const [deck, setDeck] = useState(shuffleDeck(createDeck()));
-    const [discardPile, setDiscardPile] = useState<Card[]>([]); // Ablagestapel
     const [players, setPlayers] = useState<Player[]>([
-        { name: 'Spieler 1', hand: deck.splice(0, 10), phaseComplete: false, currentPhaseIndex: 0 },
-        { name: 'Spieler 2', hand: deck.splice(0, 10), phaseComplete: false, currentPhaseIndex: 0 }
+        { name: 'Spieler 1', hand: [], phaseComplete: false, currentPhaseIndex: 0 },
+        { name: 'Spieler 2', hand: [], phaseComplete: false, currentPhaseIndex: 0 }
     ]);
-    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0); // Aktueller Spieler
 
-    const currentPlayer = players[currentPlayerIndex];
+    const [gameplay] = useState(new Gameplay(players, createDeck()));
 
-    // Karte vom Deck ziehen
-    const drawCardFromDeck = () => {
-        if (deck.length > 0) {
-            const newCard = deck.pop();
-            if (newCard) {
-                currentPlayer.hand.push(newCard);
-                setDeck([...deck]); // Deck aktualisieren
-                setPlayers([...players]); // Spielerhand aktualisieren
-            }
-        }
-    };
-
-    // Karte vom Ablagestapel ziehen
-    const drawCardFromDiscardPile = () => {
-        if (discardPile.length > 0) {
-            const newCard = discardPile.shift();
-            if (newCard) {
-                currentPlayer.hand.push(newCard);
-                setDiscardPile([...discardPile]); // Ablagestapel aktualisieren
-                setPlayers([...players]); // Spielerhand aktualisieren
-            }
-        }
-    };
-
-    // Karte ablegen und Zug beenden
-    const discardCard = (cardToPlay: Card) => {
-        currentPlayer.hand = currentPlayer.hand.filter(card => card !== cardToPlay);
-        setDiscardPile([cardToPlay, ...discardPile]); // Ablagestapel aktualisieren
+    // Funktion zum Ziehen einer Karte vom Deck
+    const handleDrawFromDeck = () => {
+        const currentPlayer = players[0]; // Beispiel: Spieler 1 ist am Zug
+        gameplay.drawCardFromDeck(currentPlayer);
         setPlayers([...players]); // Spielerhand aktualisieren
-        endTurn(); // Zug beenden
     };
 
-    // Phase überprüfen und abschließen
-    const checkAndCompletePhase = () => {
-        if (phases[currentPlayer.currentPhaseIndex].requirement(currentPlayer.hand)) {
-            alert(`${currentPlayer.name} hat die Phase abgeschlossen!`);
-            currentPlayer.phaseComplete = true;
-            currentPlayer.currentPhaseIndex++;
-            setPlayers([...players]); // Spielerphase aktualisieren
-        } else {
-            alert(`${currentPlayer.name} hat die Phase noch nicht abgeschlossen.`);
+    // Funktion zum Ziehen einer Karte vom Ablagestapel
+    const handleDrawFromDiscard = () => {
+        const currentPlayer = players[0]; // Beispiel: Spieler 1 ist am Zug
+        gameplay.drawCardFromDiscardPile(currentPlayer);
+        setPlayers([...players]); // Spielerhand aktualisieren
+    };
+
+    // Funktion, um den Pfad zu den Kartenbildern zu generieren
+    const getCardImage = (color: string | null, value: number | null) => {
+        if (color && value) {
+            return `/assets/cards/card_${color}_${value}.svg`; // Generiere den Pfad zum Kartenbild
+        } else if (!color && !value) {
+            return `/assets/cards/card_wild.svg`; // Beispiel für Joker
         }
-    };
-
-    // Zug beenden und zum nächsten Spieler wechseln
-    const endTurn = () => {
-        setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length); // Zyklisch durch die Spieler wechseln
+        return `/assets/cards/card_back.svg`; // Rückseite für ungültige Karten
     };
 
     return (
         <div className="App">
             <h1>Phase 10 Game</h1>
-            <PhaseDisplay currentPhase={phases[currentPlayer.currentPhaseIndex].description} />
-            <Deck topCard={deck[deck.length - 1]} discardPile={discardPile[0]} onDrawDeck={drawCardFromDeck} onDrawDiscard={drawCardFromDiscardPile} />
-            <Hand cards={currentPlayer.hand} onCardClick={discardCard} />
-            <GameControls onDrawDeck={drawCardFromDeck} onDrawDiscard={drawCardFromDiscardPile} onCompletePhase={checkAndCompletePhase} />
+            <button onClick={handleDrawFromDeck}>Karte vom Deck ziehen</button>
+            <button onClick={handleDrawFromDiscard}>Karte vom Ablagestapel ziehen</button>
+
+            <div>
+                <h2>Hand von {players[0].name}</h2>
+                <div className="hand">
+                    {players[0].hand.map((card, index) => (
+                        <img
+                            key={index}
+                            src={getCardImage(card.color, card.value)}
+                            alt={`Karte ${card.color} ${card.value}`}
+                            className="card-image"
+                            style={{ width: '100px', height: '150px', margin: '5px' }} // Optionales Styling
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

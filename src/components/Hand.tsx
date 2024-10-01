@@ -1,22 +1,32 @@
 import React from 'react';
-import {Card} from '../game/card';
+import { Card } from '../game/card';
 
 interface HandProps {
     cards: Card[];
-    onCardClick: (card: Card) => void; // Die Typdefinition für den Callback
+    onCardClick: (card: Card) => void;
 }
 
-const Hand: React.FC<HandProps> = ({cards, onCardClick}) => {
+const Hand: React.FC<HandProps> = ({ cards, onCardClick }) => {
+    const getCardImage = (card: Card) => {
+        if (!card.color || card.value === null) {
+            // Zeige eine Kartenrückseite, wenn entweder Farbe oder Wert nicht gesetzt sind
+            return `/assets/cards/card_back.svg`;
+        }
+
+        // Dynamischer Pfad zu den Kartensymbolen
+        return `/assets/cards/card_${card.color}_${card.value}.svg`;
+    };
+
     return (
-        <div className="flex space-x-2">
+        <div className="player-hand">
             {cards.map((card, index) => (
-                <div
+                <img
                     key={index}
-                    className={`card ${card.color}`}
-                    onClick={() => onCardClick(card)} // Hier wird die Karte an die Funktion übergeben
-                >
-                    {card.value !== null ? card.value : "Joker"}
-                </div>
+                    src={getCardImage(card)}
+                    alt={`Karte ${card.value} ${card.color}`}
+                    className="card"
+                    onClick={() => onCardClick(card)}
+                />
             ))}
         </div>
     );
