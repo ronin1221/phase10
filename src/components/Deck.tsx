@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../game/card';
+import { Card } from '@/game/card';
 
 interface DeckProps {
     topCard: Card | null;
@@ -8,31 +8,21 @@ interface DeckProps {
     onDrawDiscard: () => void;
 }
 
-const Deck: React.FC<DeckProps> = ({ topCard, discardPile, onDrawDeck, onDrawDiscard }) => {
-    const getCardImage = (card: Card | null) => {
-        if (!card || !card.color || card.value === null) {
-            // Rückseite anzeigen, wenn die Karte ungültig ist
-            return '/assets/cards/card_back.svg';
-        }
-
-        // Dynamischer Pfad zu den Kartensymbolen
-        return `/assets/cards/card_${card.color}_${card.value}.svg`;
-    };
-
+export const Deck: React.FC<DeckProps> = ({ topCard, discardPile, onDrawDeck, onDrawDiscard }) => {
     return (
         <div className="deck-area">
-            <img
-                src={getCardImage(topCard)}
-                alt="Deck"
-                className="card"
-                onClick={onDrawDeck}
-            />
-            <img
-                src={getCardImage(discardPile)}
-                alt="Ablagestapel"
-                className="card"
-                onClick={onDrawDiscard}
-            />
+            <div onClick={onDrawDeck} className="deck">
+                {/* Zeige die Rückseite des Decks an */}
+                <img src="/assets/cards/card_back.svg" alt="Deck" />
+            </div>
+            <div onClick={onDrawDiscard} className="discard-pile">
+                {/* Zeige die oberste Karte des Ablagestapels an */}
+                {discardPile ? (
+                    <img src={`/assets/cards/card_${discardPile.color}_${discardPile.value}.svg`} alt="Ablagestapel" />
+                ) : (
+                    <p>Ablagestapel leer</p>
+                )}
+            </div>
         </div>
     );
 };

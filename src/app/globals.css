@@ -8,7 +8,7 @@ body {
     height: 100vh;
 }
 
-.player-hand {
+.hand {
     display: flex;
     justify-content: center; /* Zentriere die Karten horizontal */
     align-items: center;
@@ -32,3 +32,35 @@ body {
 .card:hover {
     transform: scale(1.4); /* Leichtes Vergrößern beim Hover */
 }
+
+.game-area {
+    display: flex;
+    justify-content: center; /* Zentriert Deck und Ablagestapel horizontal */
+    align-items: center; /* Zentriert sie vertikal */
+    margin-bottom: 0px; /* Abstand zu den Karten darunter */
+}
+
+.deck, .discard-pile {
+    margin: 20px 20px; /* Abstand zwischen Deck und Ablagestapel */
+}
+
+.deck, .discard-pile {
+    width: 100px;
+    height: 150px;
+    background-color: lightgray; /* Beispiel-Farbe */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.hand {
+    display: flex;
+    justify-content: center; /* Zentriert die Karten in der Hand */
+    align-items: center;
+    position: fixed;
+    bottom: 20px; /* Position am unteren Rand des Bildschirms */
+    width: 60%;
+}
+
+
